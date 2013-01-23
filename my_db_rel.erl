@@ -1,4 +1,4 @@
-%%% Exercise 4.3 A Database Server with Transactions
+%%% Exercise 5.3 A Reliable Database Server with Transactions
 -module(my_db_rel).
 -author('skers@kth.se').
 
