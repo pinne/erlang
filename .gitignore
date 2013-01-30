@@ -5,3 +5,4 @@ deps
 *.plt
 *.swp
 *.beam
+*.results
