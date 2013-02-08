@@ -2,12 +2,12 @@
 -module(my_db_trans).
 -author('skers@kth.se').
 
-%% Server
+%%% Server
 -export([start/0, stop/0, loop/2, loop/3]).
-%% Client, helper functions
+%%% Client, helper functions
 -export([lock/0, unlock/0, write/2, read/1, match/1, delete/1]).
 
-%% Spawn server loop and register it as my_db.
+%%% Spawn server loop and register it as my_db.
 start() ->
     case whereis(my_db) of
         undefined -> register(my_db, spawn(?MODULE, loop, [free, db:new()]));
@@ -15,7 +15,7 @@ start() ->
     end,
     ok.
 
-%% Free state
+%%% Free state
 loop(free, DbRef) ->
     receive           
         {From, write, Key, Element} ->
@@ -44,7 +44,7 @@ loop(free, DbRef) ->
             From ! {reply, error},
             loop(free, DbRef)
     end.
-%% Busy, receive db commands until unlock.
+%%% Busy, receive db commands until unlock.
 loop(busy, From, DbRef) ->
     receive
         {From, write, Key, Element} ->
@@ -73,7 +73,7 @@ loop(busy, From, DbRef) ->
             loop(busy, From, DbRef)
     end.
 
-%% Client, helper functions
+%%% Client, helper functions
 write(Key, Element) ->
     my_db ! {self(), write, Key, Element},
     receive
@@ -105,7 +105,7 @@ stop() ->
         {reply, Reply} -> Reply
     end.
 
-%% Start saving db operations
+%%% Start saving db operations
 lock() ->
     my_db ! {self(), lock},
     receive
