@@ -16,6 +16,8 @@
 -export([lock/0, unlock/0, write/2, read/1, match/1, delete/1, stop/0]).
 -behaviour(gen_server).
 
+-define(DBBACKEND, db_ets).
+
 %%%===================================================================
 %%% API
 %%%===================================================================
@@ -28,7 +30,7 @@
 %% @end
 %%--------------------------------------------------------------------
 start_link() ->
-    gen_server:start_link({local, ?MODULE}, ?MODULE, db_rec, []).
+    gen_server:start_link({local, ?MODULE}, ?MODULE, ?DBBACKEND, []).
 
 %% Makes it compatible with my_db, for the tests to pass.
 start() ->
