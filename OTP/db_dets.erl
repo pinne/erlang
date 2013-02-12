@@ -1,4 +1,4 @@
-%%% Exercise 7.2 Database Handling using ETS
+%%% Exercise 8.3 Database Handling using DETS
 -module(db_dets).
 -author('skers@kth.se').
 
@@ -10,8 +10,10 @@
 %% mysterious 'ok' where my <db name> should be
 -define(DBFILE, db_dets).
 
-new() ->
-    {_Status, Name} = dets:open_file(?DBFILE, [{keypos, #data.key}]),
+new() -> new(?DBFILE).
+
+new(DbFile) ->
+    {_Status, Name} = dets:open_file(DbFile, [{keypos, #data.key}]),
     Name.
 
 destroy(Db) ->
