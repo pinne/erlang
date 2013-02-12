@@ -16,7 +16,7 @@
 -export([lock/0, unlock/0, write/2, read/1, match/1, delete/1, stop/0]).
 -behaviour(gen_server).
 
--define(DBBACKEND, db_ets).
+-define(DBBACKEND, db_dets).
 
 %%%===================================================================
 %%% API
@@ -71,16 +71,16 @@ init(DbBackend) ->
 %% @end
 %%--------------------------------------------------------------------
 handle_call({write, Key, Element}, _From, DbRef) ->
-    {reply, ok, db_rec:write(Key, Element, DbRef)};
+    {reply, ok, ?DBBACKEND:write(Key, Element, DbRef)};
 
 handle_call({read, Key}, _From, DbRef) ->
-    {reply, db_rec:read(Key, DbRef), DbRef};
+    {reply, ?DBBACKEND:read(Key, DbRef), DbRef};
 
 handle_call({match, Element}, _From, DbRef) ->
-    {reply, db_rec:match(Element, DbRef), DbRef};
+    {reply, ?DBBACKEND:match(Element, DbRef), DbRef};
 
 handle_call({delete, Key}, _From, DbRef) ->
-    {reply, ok, db_rec:delete(Key, DbRef)}.
+    {reply, ok, ?DBBACKEND:delete(Key, DbRef)}.
 
 
 %%--------------------------------------------------------------------
@@ -109,8 +109,13 @@ handle_cast(_Msg, State) ->
 %%                                   {stop, Reason, State}
 %% @end
 %%--------------------------------------------------------------------
+handle_info({'EXIT', Pid, Reason}, State) ->
+    io:format("~p died: ~p, ~p~n", [Pid, Reason, State]),
+    {noreply, State};
+
 handle_info(_Info, State) ->
     {noreply, State}.
+
 
 %%--------------------------------------------------------------------
 %% @private

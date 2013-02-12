@@ -1,0 +1,12 @@
+c(db_sup).
+db_sup:start_link().
+whereis(db_gen_server).
+exit(whereis(db_gen_server), kill).
+whereis(db_gen_server).
+db_gen_server:write(simon, london).
+db_gen_server:write(davve, sthlm).
+db_gen_server:write(linda, sthlm).
+db_gen_server:match(sthlm).
+exit(whereis(db_gen_server), kill).
+db_gen_server:match(sthlm).
+
